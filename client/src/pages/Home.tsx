@@ -22,7 +22,7 @@ import {
   X,
 } from "lucide-react";
 
-const heroImage = "/manus-storage/lavande-hero_9829ea59.png";
+const heroImage = "./lavande-hero.png";
 
 const products = [
   {
