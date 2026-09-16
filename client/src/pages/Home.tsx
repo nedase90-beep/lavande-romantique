@@ -185,10 +185,10 @@ export default function Home() {
             <img src={heroImage} alt="عطر لافندر وشمعة في حديقة مزهرة" className="absolute inset-0 h-full w-full object-cover object-center" />
             <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(50,37,54,.9)_0%,rgba(68,48,73,.60)_34%,rgba(53,39,61,.10)_76%,rgba(43,31,48,.25)_100%)]" />
             <div className="absolute inset-y-0 right-0 hidden w-[28%] bg-gradient-to-l from-[#5b3e65]/35 to-transparent lg:block" />
-            <div className="relative z-10 flex min-h-[530px] items-end px-7 pb-10 sm:min-h-[600px] sm:px-12 sm:pb-14 lg:min-h-[620px] lg:items-center lg:px-16 lg:pb-0">
-              <div className="max-w-[530px] text-white">
+            <div dir="ltr" className="relative z-10 flex min-h-[530px] items-start justify-start px-7 pt-12 sm:min-h-[600px] sm:px-12 sm:pt-16 lg:min-h-[620px] lg:px-16 lg:pt-24">
+              <div dir="rtl" className="max-w-[530px] text-left text-white">
                 <div className="animate-rise mb-4 flex items-center gap-3 text-[11px] font-medium tracking-[.18em] text-[#f0d8a4] sm:text-xs"><span className="h-px w-9 bg-[#d1ad6d]" /> عطور · شموع · لحظات</div>
-                <h1 className="display-font animate-rise text-[54px] font-medium leading-[.9] tracking-[-.02em] text-[#fffaf4] delay-1 sm:text-[76px] lg:text-[92px]">رائحة تشبه<br /><em className="font-normal text-[#e7c995]">الحب.</em></h1>
+                <h1 className="display-font animate-rise text-left text-[54px] font-medium leading-[.9] tracking-[-.02em] text-[#fffaf4] delay-1 sm:text-[76px] lg:text-[92px]">رائحة تهديك<br /><em className="font-normal text-[#e7c995]">الراحة.</em></h1>
                 <p className="animate-rise mt-6 max-w-[410px] text-sm leading-8 text-white/80 delay-2 sm:text-base">اكتشفي عالمًا من الروائح الهادئة، صُنعت يدويًا لتملأ مساحتك بدفء لا يُنسى.</p>
                 <div className="animate-rise mt-8 flex flex-wrap items-center gap-3 delay-3"><button onClick={goToProducts} className="btn-lift flex items-center gap-3 rounded-full bg-[#f8edd8] px-6 py-3.5 text-sm font-semibold text-[#544050]">تسوقي المجموعة <ArrowLeft size={17} /></button><a href="#story" className="rounded-full border border-white/35 px-5 py-3 text-sm text-white/90 transition hover:border-white hover:bg-white/10">اكتشفي قصتنا</a></div>
               </div>
