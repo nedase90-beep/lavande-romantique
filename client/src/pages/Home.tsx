@@ -22,7 +22,7 @@ import {
   X,
 } from "lucide-react";
 
-const heroImage = "./lavande-hero.webp";
+const heroImage = `${import.meta.env.BASE_URL}lavande-hero.webp`;
 
 const products = [
   {
