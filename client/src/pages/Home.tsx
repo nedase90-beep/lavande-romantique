@@ -22,7 +22,7 @@ import {
   X,
 } from "lucide-react";
 
-const heroImage = "https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=1600&q=85";
+const heroImage = "./lavande-hero.webp";
 
 const products = [
   {
@@ -98,6 +98,13 @@ type CartItem = { product: Product; quantity: number };
 
 const categories = ["الكل", "عطور", "شموع", "بخور", "هدايا"];
 
+const personalityProfiles = [
+  { id: "calm", label: "الهادئة", icon: "☾", note: "تحبين المساحات الهادئة واللحظات الناعمة", match: "لافندر رومانتيك", description: "مزيج لافندر ومسك أبيض يمنحك هدوءًا يشبه أمسية دافئة.", productId: 1 },
+  { id: "bold", label: "الجريئة", icon: "✦", note: "تحبين الحضور القوي والتفاصيل اللافتة", match: "فانيلا وعود", description: "دفء العود مع حلاوة الفانيلا لعطر يترك أثرًا لا يُنسى.", productId: 5 },
+  { id: "romantic", label: "الرومانسية", icon: "♡", note: "تؤمنين أن التفاصيل الصغيرة تصنع الذكريات", match: "شمعة الرمان والورد", description: "ورد ورمان بإضاءة دافئة، كأنها رسالة حب في كل زاوية.", productId: 2 },
+  { id: "curious", label: "المغامرة", icon: "↗", note: "تبحثين دائمًا عن رائحة جديدة ومختلفة", match: "بخور بيت العود", description: "نفحات شرقية عميقة تضيف شخصية مميزة إلى المكان.", productId: 3 },
+];
+
 export default function Home() {
   const [activeCategory, setActiveCategory] = useState("الكل");
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -106,6 +113,7 @@ export default function Home() {
   const [checkoutOpen, setCheckoutOpen] = useState(false);
   const [notice, setNotice] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
+  const [selectedPersonality, setSelectedPersonality] = useState("calm");
 
   const filteredProducts = useMemo(
     () => activeCategory === "الكل" ? products : products.filter((product) => product.category === activeCategory),
@@ -116,6 +124,8 @@ export default function Home() {
   const subtotal = cart.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
   const delivery = subtotal === 0 || subtotal >= 35 ? 0 : 3;
   const total = subtotal + delivery;
+  const suggestedProfile = personalityProfiles.find((profile) => profile.id === selectedPersonality) ?? personalityProfiles[0];
+  const suggestedProduct = products.find((product) => product.id === suggestedProfile.productId) ?? products[0];
 
   function announce(message: string) {
     setNotice(message);
@@ -163,6 +173,7 @@ export default function Home() {
             </a>
             <nav className="hidden items-center gap-7 text-[13px] font-medium text-[#695d67] lg:flex">
               <a className="transition-colors hover:text-[#775586]" href="#products">المتجر</a>
+              <a className="transition-colors hover:text-[#775586]" href="#advisor">اختاري عطرك</a>
               <a className="transition-colors hover:text-[#775586]" href="#story">قصتنا</a>
               <a className="transition-colors hover:text-[#775586]" href="#gifts">هدايا المناسبات</a>
               <a className="transition-colors hover:text-[#775586]" href="#contact">تواصل معنا</a>
@@ -210,6 +221,18 @@ export default function Home() {
           </div>
         </section>
 
+        <section id="advisor" className="container py-20 sm:py-28">
+          <div className="overflow-hidden rounded-[30px] bg-[#5a4562] text-white shadow-[0_24px_70px_rgba(80,58,87,.18)]">
+            <div className="grid lg:grid-cols-[.78fr_1.22fr]">
+              <div className="relative overflow-hidden bg-[#4d3b55] p-7 sm:p-10 lg:p-12">
+                <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full border border-white/10" />
+                <div className="relative z-10"><span className="mb-6 flex h-12 w-12 items-center justify-center rounded-full border border-[#e4c895]/50 bg-[#e4c895]/10 text-2xl text-[#e4c895]">✦</span><p className="text-[10px] font-bold tracking-[.2em] text-[#e4c895]">SCENT CONCIERGE</p><h2 className="display-font mt-4 text-5xl font-medium leading-[.95] sm:text-6xl">مستشارك<br /><em className="font-normal text-[#e4c895]">العطري.</em></h2><p className="mt-5 text-sm leading-8 text-white/70">أجيبي عن سؤال واحد، وسنقترح لك رائحة تشبهك وتليق بلحظتك.</p><div className="mt-8 flex items-center gap-3 text-xs text-white/60"><span className="flex h-7 w-7 items-center justify-center rounded-full bg-white/10">01</span> اختيار بسيط · نتيجة شخصية</div></div>
+              </div>
+              <div className="bg-[#fffdf9] p-7 text-[#4e3c4f] sm:p-10 lg:p-12"><p className="text-xs font-bold text-[#b18c59]">ما الشخصية الأقرب لك؟</p><div className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-4">{personalityProfiles.map((profile) => <button key={profile.id} onClick={() => setSelectedPersonality(profile.id)} className={`rounded-2xl border p-4 text-center transition ${selectedPersonality === profile.id ? "border-[#82668d] bg-[#f0e4f1] text-[#62496b] shadow-sm" : "border-[#eadfd7] bg-[#fcf8f1] text-[#887982] hover:border-[#c8aecf]"}`}><span className="block text-2xl">{profile.icon}</span><span className="mt-2 block text-xs font-bold">{profile.label}</span></button>)}</div><p className="mt-4 text-xs text-[#93848d]">{suggestedProfile.note}</p><div className="mt-7 flex flex-col gap-5 rounded-2xl bg-[#f6eee9] p-5 sm:flex-row sm:items-center"><img src={suggestedProduct.image} alt={suggestedProfile.match} className="h-28 w-full rounded-xl object-cover sm:h-24 sm:w-24" /><div className="flex-1"><p className="text-[10px] font-bold tracking-[.12em] text-[#b18c59]">رائحتك المقترحة</p><h3 className="mt-1 text-xl font-bold text-[#5b4561]">{suggestedProfile.match}</h3><p className="mt-2 text-xs leading-6 text-[#81727b]">{suggestedProfile.description}</p></div><button onClick={() => addToCart(suggestedProduct)} className="btn-lift shrink-0 rounded-full bg-[#665174] px-5 py-3 text-xs font-bold text-white">أضيفيها للسلة</button></div></div>
+            </div>
+          </div>
+        </section>
+
         <section id="story" className="container grid items-center gap-10 py-20 sm:py-28 lg:grid-cols-[.9fr_1.1fr] lg:gap-20">
           <div className="relative mx-auto w-full max-w-md"><div className="absolute -inset-4 -z-10 rounded-[50%] border border-[#d7c2c8]" /><div className="absolute -inset-8 -z-10 rounded-[50%] border border-[#ede1d8]" /><div className="relative aspect-[.9] overflow-hidden rounded-[48%_48%_22px_22px] bg-[#e9dce6]"><img src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=85" alt="زهور بنفسجية مختارة بعناية" className="h-full w-full object-cover" /></div><div className="absolute -bottom-5 -right-5 rounded-full bg-[#665174] px-5 py-4 text-center text-white shadow-lg"><span className="display-font block text-2xl">2021</span><span className="text-[9px] text-white/70">منذ البداية</span></div></div>
           <div className="max-w-xl"><p className="mb-3 text-[11px] font-bold tracking-[.18em] text-[#b18c59]">OUR STORY</p><h2 className="display-font text-5xl font-medium leading-[.95] text-[#514052] sm:text-6xl">نصنع الجمال<br /><em className="font-normal text-[#8e739e]">من أبسط التفاصيل.</em></h2><p className="mt-7 text-sm leading-8 text-[#786a73]">بدأت Lavande Romantique من حبّ صغير للعطور التي تبقى في الذاكرة. نختار كل نوتة عطرية، كل فتيل، وكل زهرة مجففة كأنها هدية لشخص نحبه.</p><p className="mt-4 text-sm leading-8 text-[#786a73]">نؤمن أن الرفاهية ليست صخبًا؛ إنها لحظة هدوء، ضوء شمعة، ورائحة تأخذك إلى مكان أجمل.</p><a href="#contact" className="mt-8 inline-flex items-center gap-2 border-b border-[#b18c59] pb-2 text-sm font-bold text-[#604b68] transition hover:text-[#b18c59]">تعرفي علينا أكثر <ArrowLeft size={16} /></a></div>
@@ -218,6 +241,8 @@ export default function Home() {
         <section id="gifts" className="relative overflow-hidden bg-[#514258] px-4 py-16 text-white sm:px-6 sm:py-20"><div className="absolute -left-24 -top-24 h-64 w-64 rounded-full border border-white/10" /><div className="absolute -bottom-40 right-0 h-96 w-96 rounded-full border border-white/10" /><div className="container relative grid items-center gap-8 lg:grid-cols-[1fr_auto]"><div><p className="mb-3 text-[11px] font-bold tracking-[.2em] text-[#e3c48b]">A LITTLE SOMETHING SPECIAL</p><h2 className="display-font text-5xl font-medium sm:text-6xl">هدية تقول<br /><em className="font-normal text-[#e4c895]">أحبك.</em></h2><p className="mt-4 max-w-lg text-sm leading-8 text-white/70">اختاري باقة من مجموعتنا، وسنغلفها لك بعناية ونضيف بطاقة برسالتك الخاصة.</p></div><button onClick={() => { setActiveCategory("هدايا"); goToProducts(); }} className="btn-lift flex w-fit items-center gap-3 rounded-full bg-[#f8edd8] px-7 py-4 text-sm font-bold text-[#5b435d]">اكتشفي باقات الهدايا <ArrowLeft size={17} /></button></div></section>
 
         <section className="container py-16 sm:py-20"><div className="rounded-[26px] bg-[#f0e4e7] px-6 py-12 text-center sm:px-10"><Sparkles className="mx-auto mb-4 text-[#a47e51]" size={23} strokeWidth={1.5} /><p className="mb-3 text-[11px] font-bold tracking-[.18em] text-[#b18c59]">A NOTE FROM US</p><h2 className="display-font text-4xl font-medium text-[#5c4664] sm:text-5xl">كل طلبية تحمل جزءًا من قلبنا</h2><p className="mx-auto mt-4 max-w-xl text-sm leading-7 text-[#796d75]">نغلف كل طلبية يدويًا ونرسلها إليك داخل الأردن خلال 2–3 أيام عمل، لأن التفاصيل الصغيرة تصنع الفرق.</p><div className="mx-auto mt-7 flex max-w-lg flex-col gap-2 sm:flex-row"><input className="w-full rounded-full border border-[#dfcfd2] bg-[#fffaf9] px-5 py-3 text-right text-sm outline-none placeholder:text-[#b19fa6] focus:border-[#9a7aa4]" placeholder="بريدك الإلكتروني" type="email" /><button onClick={() => announce("شكرًا لك، سنبقيك على اطلاع بأجمل الأخبار")} className="btn-lift whitespace-nowrap rounded-full bg-[#665174] px-6 py-3 text-sm font-bold text-white">انضمي للقائمة</button></div></div></section>
+
+        <section id="location" className="border-t border-[#eadfd7] bg-[#f4ede7] px-4 py-16 sm:px-6 sm:py-20"><div className="container"><div className="mb-8 flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p className="mb-3 text-[11px] font-bold tracking-[.18em] text-[#b18c59]">COME SAY HELLO</p><h2 className="display-font text-5xl font-medium text-[#514052] sm:text-6xl">زورينا في المحل</h2><p className="mt-3 text-sm text-[#857681]">نستقبلك بحب في قلب عمّان — لتجربي روائحك على مهل.</p></div><a className="btn-lift flex w-fit items-center gap-2 rounded-full bg-[#665174] px-5 py-3 text-xs font-bold text-white" href="https://www.google.com/maps/search/?api=1&query=31.963158%2C35.930359" target="_blank" rel="noreferrer"><MapPin size={16} /> افتحي الاتجاهات</a></div><div className="grid overflow-hidden rounded-[26px] border border-[#e4d8cf] bg-[#fffdf9] shadow-sm lg:grid-cols-[.72fr_1.28fr]"><div className="flex flex-col justify-between p-7 sm:p-10"><div><div className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-[#f0e4f1] text-[#75577e]"><MapPin size={23} /></div><h3 className="text-xl font-bold text-[#574456]">Lavande Romantique</h3><p className="mt-2 text-sm leading-7 text-[#8a7982]">شارع الرينبو، جبل عمّان<br />عمّان، الأردن</p></div><div className="mt-8 space-y-4 border-t border-[#eee4dc] pt-6 text-xs text-[#857681]"><p className="flex items-center gap-3"><Clock3 size={17} className="text-[#b18c59]" /> السبت – الخميس · 9 صباحًا – 6 مساءً</p><p className="flex items-center gap-3"><Truck size={17} className="text-[#b18c59]" /> شحن متاح لكل محافظات الأردن</p></div></div><iframe title="خريطة موقع Lavande Romantique في عمّان" src="https://www.openstreetmap.org/export/embed.html?bbox=35.915%2C31.945%2C35.945%2C31.975&layer=mapnik&marker=31.963158%2C35.930359" className="h-[320px] w-full border-0 grayscale-[.2] sm:h-[380px]" loading="lazy" /></div></div></section>
       </main>
 
       <footer id="contact" className="border-t border-[#eadfd7] bg-[#fffdf9] px-4 pb-8 pt-12"><div className="container grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.4fr_.8fr_.8fr_1fr]"><div><a href="#top" className="flex items-center gap-2"><span className="flex h-10 w-10 items-center justify-center rounded-full border border-[#c6a86d] bg-[#f3e8de] text-[#6e5578]"><Flower2 size={20} strokeWidth={1.4} /></span><span className="leading-none"><span className="display-font block text-2xl font-semibold text-[#5c4664]">Lavande</span><span className="mt-0.5 block text-[8px] font-semibold tracking-[.34em] text-[#b18c59]">ROMANTIQUE</span></span></a><p className="mt-5 max-w-xs text-xs leading-7 text-[#8b7c84]">عطور وشموع تُصنع ببطء، لتمنح يومك لحظة أجمل.</p><div className="mt-5 flex gap-2"><a href="#contact" aria-label="إنستغرام" className="rounded-full bg-[#f3e8de] p-2.5 text-[#6c5572] transition hover:bg-[#e8d9e9]"><Instagram size={16} /></a><a href="#contact" aria-label="تواصل معنا" className="rounded-full bg-[#f3e8de] p-2.5 text-[#6c5572] transition hover:bg-[#e8d9e9]"><MapPin size={16} /></a></div></div><div><h3 className="mb-4 text-sm font-bold text-[#554250]">تسوقي</h3><div className="flex flex-col gap-3 text-xs text-[#8b7c84]"><a href="#products" className="hover:text-[#6d5275]">كل المنتجات</a><a href="#products" onClick={() => setActiveCategory("عطور")} className="hover:text-[#6d5275]">العطور</a><a href="#products" onClick={() => setActiveCategory("شموع")} className="hover:text-[#6d5275]">الشموع</a><a href="#gifts" className="hover:text-[#6d5275]">باقات الهدايا</a></div></div><div><h3 className="mb-4 text-sm font-bold text-[#554250]">مساعدتك</h3><div className="flex flex-col gap-3 text-xs text-[#8b7c84]"><a href="#contact" className="hover:text-[#6d5275]">تتبع الطلب</a><a href="#contact" className="hover:text-[#6d5275]">سياسة الاستبدال</a><a href="#contact" className="hover:text-[#6d5275]">الأسئلة الشائعة</a><a href="#contact" className="hover:text-[#6d5275]">اتصل بنا</a></div></div><div><h3 className="mb-4 text-sm font-bold text-[#554250]">نحن هنا لأجلك</h3><div className="flex flex-col gap-4 text-xs text-[#8b7c84]"><p className="flex items-start gap-2"><MapPin size={16} className="mt-0.5 shrink-0 text-[#b18c59]" />نشحن إلى جميع محافظات الأردن</p><p className="flex items-start gap-2"><Clock3 size={16} className="mt-0.5 shrink-0 text-[#b18c59]" />السبت – الخميس · 9 ص – 6 م</p></div></div></div><div className="container mt-10 flex flex-col justify-between gap-2 border-t border-[#eadfd7] pt-5 text-[10px] text-[#aa9ba1] sm:flex-row"><span>© 2024 Lavande Romantique. صُنع بحب في الأردن.</span><span>الدفع عند الاستلام متاح داخل الأردن</span></div></footer>
